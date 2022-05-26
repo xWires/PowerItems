@@ -37,6 +37,9 @@ public final class PowerItems extends JavaPlugin {
 			saveItemData(commandItem);
     		return true;
     	}
+		else if (cmd.getName().equalsIgnoreCase("getitem")) {
+			getItemData(args[0]);
+		}
     	return false; 
     }
 	public void saveItemData(ItemDefinitions createdItem) {
@@ -45,5 +48,12 @@ public final class PowerItems extends JavaPlugin {
 		this.getConfig().set("items." + createdItem.getInternalName() + ".damageValue", createdItem.getHitDamageValue());
 		this.getConfig().set("items." + createdItem.getInternalName() + ".itemRarity", createdItem.getItemRarityType());
 		this.saveConfig();
+	}
+	public void getItemData(String internalName) {
+		String itemName = this.getConfig().getString("items." + internalName + ".itemName");
+		String itemMaterial = this.getConfig().getString("items." + internalName + ".itemMaterial");
+		String damageValue = this.getConfig().getString("items." + internalName + ".damageValue");
+		String itemRarity = this.getConfig().getString("items." + internalName + ".itemRarity");
+		ItemDefinitions getItem = new ItemDefinitions(internalName, itemName, itemMaterial, damageValue, itemRarity);
 	}
 }
