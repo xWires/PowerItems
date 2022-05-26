@@ -1,0 +1,15 @@
+name: PowerItems
+main: xyz.tangledwires.poweritems.PowerItems
+version: 1.0.0
+author: YT_TangledWires
+commands:
+   testitem:
+      description: Obtain the test item
+      usage: /testitem
+      permission: poweritems.testitem
+      permission-message: You don't have permission.
+   createitem:
+      description: Construct a new custom item
+      usage: /createitem
+      permission: poweritems.createitem
+      permission-message: You don't have permission.
