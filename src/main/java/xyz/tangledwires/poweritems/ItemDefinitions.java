@@ -12,7 +12,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-public class  ItemDefinitions {
+public class ItemDefinitions {
 	private String hitDamageValue;
 	private String itemRarityType;
 	private String internalName;
@@ -106,7 +106,7 @@ public class  ItemDefinitions {
 		return "\nInternalName: " + internalName + "\nName: " + name + "\nMaterial: " + material + "\nDamage: " + damage + "\nRarity: " + rarity + "\n";
 	}
 	public String getItemName() { return itemName; }
-	public void setItemName(String itemName) {this.hitDamageValue = hitDamageValue;}
+	public void setItemName(String itemName) {this.itemName = itemName;}
 	public String getItemMaterial() { return itemMaterial; }
 	public void setItemMaterial(String itemMaterial) {this.itemMaterial = itemMaterial;}
 }
