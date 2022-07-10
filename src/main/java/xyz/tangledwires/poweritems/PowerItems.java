@@ -16,12 +16,12 @@ import java.io.IOException;
 public final class PowerItems extends JavaPlugin {
 	@Override
     public void onEnable() {
-		Bukkit.getServer().getLogger().info("Loaded PowerItems. Enjoy!");
+		Bukkit.getServer().getLogger().info("Loaded PowerItems by xWires.");
     }
     
     @Override
     public void onDisable() {
-        Bukkit.getServer().getLogger().info("PowerItems Disabled, bye! Have a nice day.");
+        Bukkit.getServer().getLogger().info("PowerItems Disabled, bye!");
     }
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
