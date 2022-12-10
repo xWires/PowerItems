@@ -27,13 +27,18 @@ public final class PowerItems extends JavaPlugin {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
     	if (cmd.getName().equalsIgnoreCase("testitem")) { 
     		@SuppressWarnings("unused")
-			ItemDefinitions testItem = new ItemDefinitions("testItem", "Test Item", "DIAMOND_SWORD", "50", "common");
+			ItemDefinitions testItem = new ItemDefinitions("testItem", "DIAMOND_SWORD", "50", "common", "Test Item");
     		@SuppressWarnings("unused")
-			ItemDefinitions masterStaff = new ItemDefinitions("masterStaff", "§r§9Master Staff", "BLAZE_ROD", "500", "rare");
+			ItemDefinitions masterStaff = new ItemDefinitions("masterStaff", "BLAZE_ROD", "500", "rare", "§r§9Master Staff");
     		return true;
     	}
     	else if (cmd.getName().equalsIgnoreCase("createitem")) {
-    		ItemDefinitions commandItem = new ItemDefinitions(args[0], args[1], args[2], args[3], args[4]);
+			StringBuilder itemNameBuilder = new StringBuilder(args[4]);
+            for (int arg = 5; arg < args.length; arg++) {
+              itemNameBuilder.append(" ").append(args[arg]);
+            }
+			String builtItemName = itemNameBuilder.toString();
+    		ItemDefinitions commandItem = new ItemDefinitions(args[0], args[1], args[2], args[3], builtItemName);
 			saveItemData(commandItem);
     		return true;
     	}

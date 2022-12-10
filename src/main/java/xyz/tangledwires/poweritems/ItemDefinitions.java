@@ -18,7 +18,7 @@ public class ItemDefinitions {
 	private String internalName;
 	private String itemName;
 	private String itemMaterial;
-	ItemDefinitions(String internalName, String itemName, String itemMaterial, String damageValue, String rarity) {
+	ItemDefinitions(String internalName, String itemMaterial, String damageValue, String rarity, String itemName) {
 		setInternalName(internalName);
 		setHitDamageValue(damageValue);
 		setItemRarityType(rarity);
@@ -103,7 +103,7 @@ public class ItemDefinitions {
 		this.hitDamageValue = hitDamageValue;
 	}
 	public String toString(String internalName, String name, String material, int damage, String rarity) {
-		return "\nInternalName: " + internalName + "\nName: " + name + "\nMaterial: " + material + "\nDamage: " + damage + "\nRarity: " + rarity + "\n";
+		return "\nInternalName: " + internalName + "\nMaterial: " + material + "\nDamage: " + damage + "\nRarity: " + rarity + "\n" + "\nName: " + name;
 	}
 	public String getItemName() { return itemName; }
 	public void setItemName(String itemName) {this.itemName = itemName;}
