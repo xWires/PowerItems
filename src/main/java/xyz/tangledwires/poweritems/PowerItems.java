@@ -35,7 +35,7 @@ public final class PowerItems extends JavaPlugin {
             for (int arg = 5; arg < args.length; arg++) {
               itemNameBuilder.append(" ").append(args[arg]);
             }
-			String builtItemName = itemNameBuilder.toString();
+		String builtItemName = itemNameBuilder.toString();
     		ItemDefinitions commandItem = new ItemDefinitions(args[0], args[1], args[2], args[3], builtItemName);
 			saveItemData(commandItem);
     		return true;
