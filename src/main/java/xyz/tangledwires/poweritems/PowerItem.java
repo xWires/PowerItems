@@ -12,13 +12,13 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-public class ItemDefinitions {
+public class PowerItem {
 	private String hitDamageValue;
 	private String itemRarityType;
 	private String internalName;
 	private String itemName;
 	private String itemMaterial;
-	ItemDefinitions(String internalName, String itemMaterial, String damageValue, String rarity, String itemName) {
+	PowerItem(String internalName, String itemMaterial, String damageValue, String rarity, String itemName) {
 		setInternalName(internalName);
 		setHitDamageValue(damageValue);
 		setItemRarityType(rarity);
