@@ -51,6 +51,7 @@ public final class PowerItems extends JavaPlugin {
 		String itemMaterial = this.getConfig().getString("items." + internalName + ".itemMaterial");
 		String damageValue = this.getConfig().getString("items." + internalName + ".damageValue");
 		String itemRarity = this.getConfig().getString("items." + internalName + ".itemRarity");
+		@SuppressWarnings("unused")
 		PowerItem getItem = new PowerItem(internalName, itemName, itemMaterial, damageValue, itemRarity);
 	}
 }
