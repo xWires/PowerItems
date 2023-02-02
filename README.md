@@ -1,3 +1,3 @@
 # PowerItems
 
-PowerItems is a Minecraft Spigot plugin created to assist in the creation of custom items.
+PowerItems is a Minecraft Spigot plugin that can be used to make items with custom amounts of damage and lore
