@@ -3,6 +3,7 @@ package xyz.tangledwires.poweritems;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class PowerItems extends JavaPlugin {
@@ -18,10 +19,14 @@ public final class PowerItems extends JavaPlugin {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
     	if (cmd.getName().equalsIgnoreCase("testitem")) { 
-    		@SuppressWarnings("unused")
-			PowerItem testItem = new PowerItem("testItem", "DIAMOND_SWORD", "50", "common", "Test Item");
-    		@SuppressWarnings("unused")
-			PowerItem masterStaff = new PowerItem("masterStaff", "BLAZE_ROD", "500", "rare", "§r§9Master Staff");
+    		if(sender instanceof Player) {
+            	Player p = (Player) sender;
+				PowerItem testItem = new PowerItem("testItem", "DIAMOND_SWORD", "50", "common", "Test Item");
+				testItem.giveItem(p);
+				PowerItem ultraStaff = new PowerItem("ultraStaff", "BLAZE_ROD", "500", "rare", "§r§9Ultra Staff");
+				ultraStaff.giveItem(p);
+			}
+			
     		return true;
     	}
     	else if (cmd.getName().equalsIgnoreCase("createitem")) {
@@ -35,7 +40,16 @@ public final class PowerItems extends JavaPlugin {
     		return true;
     	}
 		else if (cmd.getName().equalsIgnoreCase("getitem")) {
-			getItemData(args[0]);
+			String itemName = this.getConfig().getString("items." + args[0] + ".itemName");
+			String itemMaterial = this.getConfig().getString("items." + args[0] + ".itemMaterial");
+			String damageValue = this.getConfig().getString("items." + args[0] + ".damageValue");
+			String itemRarity = this.getConfig().getString("items." + args[0] + ".itemRarity");
+			if(sender instanceof Player) {
+            	Player p = (Player) sender;
+				PowerItem getItem = new PowerItem(args[0], itemName, itemMaterial, damageValue, itemRarity);
+				getItem.giveItem(p);
+			}
+			
 		}
     	return false; 
     }
@@ -47,11 +61,6 @@ public final class PowerItems extends JavaPlugin {
 		this.saveConfig();
 	}
 	public void getItemData(String internalName) {
-		String itemName = this.getConfig().getString("items." + internalName + ".itemName");
-		String itemMaterial = this.getConfig().getString("items." + internalName + ".itemMaterial");
-		String damageValue = this.getConfig().getString("items." + internalName + ".damageValue");
-		String itemRarity = this.getConfig().getString("items." + internalName + ".itemRarity");
-		@SuppressWarnings("unused")
-		PowerItem getItem = new PowerItem(internalName, itemName, itemMaterial, damageValue, itemRarity);
+
 	}
 }

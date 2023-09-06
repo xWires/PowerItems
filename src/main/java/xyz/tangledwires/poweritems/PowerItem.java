@@ -18,6 +18,7 @@ public class PowerItem {
 	private String internalName;
 	private String itemName;
 	private String itemMaterial;
+	private ItemStack is;
 	PowerItem(String internalName, String itemMaterial, String damageValue, String rarity, String itemName) {
 		setInternalName(internalName);
 		setHitDamageValue(damageValue);
@@ -26,16 +27,13 @@ public class PowerItem {
 		setItemName(itemName);
 		Material material = Material.matchMaterial(itemMaterial);
 		if (material == null) {
-			Bukkit.getServer().getLogger().severe("Tried to create an item with an unknown material!");
+			Bukkit.getServer().getLogger().severe("[PowerItems] Tried to create an item with an unknown material!");
 		}
 		else {
 			ItemStack is = new ItemStack(material);
 			setName(is, itemName);
 			setCustomLore(is);
 			setDamageValue(is, damageValue);
-			for(Player player : Bukkit.getOnlinePlayers()) {
-				player.getInventory().addItem(is);
-			}
 		}
 	}
 	public ItemStack setName(ItemStack is, String name){
@@ -109,4 +107,10 @@ public class PowerItem {
 	public void setItemName(String itemName) {this.itemName = itemName;}
 	public String getItemMaterial() { return itemMaterial; }
 	public void setItemMaterial(String itemMaterial) {this.itemMaterial = itemMaterial;}
+	public ItemStack getItemStack() { return is; }
+	public void setItemStack(ItemStack is) {this.is = is; }
+
+	public void giveItem(Player player) {
+		player.getInventory().addItem(is);
+	}
 }
