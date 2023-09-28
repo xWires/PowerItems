@@ -3,6 +3,7 @@ package xyz.tangledwires.poweritems;
 import java.util.ArrayList;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
@@ -34,6 +35,7 @@ public class PowerItem {
 			setName(is, itemName);
 			setCustomLore(is);
 			setDamageValue(is, damageValue);
+			setItemStack(is);
 		}
 	}
 	public ItemStack setName(ItemStack is, String name){
@@ -45,29 +47,46 @@ public class PowerItem {
 	public ItemStack setCustomLore(ItemStack is) {
 		ItemMeta m = is.getItemMeta();
 		ArrayList<String> lore = new ArrayList<String>();
-		lore.add("§r§7Damage: " + "§c+" + getHitDamageValue());
+		String damage = ChatColor.GRAY + "Damage: ";
+		damage = damage + ChatColor.RED;
+		damage = damage + "+" + getHitDamageValue();
+		lore.add(damage);
 		lore.add("");
+		String rarity;
 		switch (itemRarityType) {
 			case "common" :
-				lore.add("§r§f§lCOMMON");
+				rarity = ChatColor.BOLD + "COMMON";
+				rarity = ChatColor.WHITE + rarity;
+				lore.add(rarity);
 				break;
 			case "uncommon" :
-				lore.add("§r§a§lUNCOMMON");
+				rarity = ChatColor.BOLD + "UNCOMMON";
+				rarity = ChatColor.GREEN + rarity;
+				lore.add(rarity);
 				break;
 			case "rare" :
-				lore.add("§r§9§lRARE");
+				rarity = ChatColor.BOLD + "RARE";
+				rarity = ChatColor.BLUE + rarity;
+				lore.add(rarity);
 				break;
 			case "epic" :
-				lore.add("§r§5§lEPIC");
+				rarity = ChatColor.BOLD + "EPIC";
+				rarity = ChatColor.DARK_PURPLE + rarity;
+				lore.add(rarity);
 				break;
 			case "legendary" :
-				lore.add("§r§6§lLEGENDARY");
+				rarity = ChatColor.BOLD + "LEGENDARY";
+				rarity = ChatColor.GOLD + rarity;
+				lore.add(rarity);
 				break;
 			case "mythic" :
-				lore.add("§r§d§lMYTHIC");
+				rarity = ChatColor.BOLD + "MYTHIC";
+				rarity = ChatColor.LIGHT_PURPLE + rarity;
+				lore.add(rarity);
 				break;
 			default:
-				lore.add("UNKNOWN");
+				rarity = ChatColor.translateAlternateColorCodes("&".charAt(0), itemRarityType);
+				lore.add(rarity);
 				break;
 		}
 		m.setLore(lore);
@@ -111,6 +130,8 @@ public class PowerItem {
 	public void setItemStack(ItemStack is) {this.is = is; }
 
 	public void giveItem(Player player) {
-		player.getInventory().addItem(is);
+		Bukkit.getServer().getLogger().info("[PowerItems] Ran giveItem");
+		player.getInventory().addItem(getItemStack());
+		Bukkit.getServer().getLogger().info("[PowerItems] Tried to give " + player.getName() + " an item");
 	}
 }

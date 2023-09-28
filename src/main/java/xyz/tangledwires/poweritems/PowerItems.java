@@ -1,6 +1,7 @@
 package xyz.tangledwires.poweritems;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -30,20 +31,36 @@ public final class PowerItems extends JavaPlugin {
     		return true;
     	}
     	else if (cmd.getName().equalsIgnoreCase("createitem")) {
-			StringBuilder itemNameBuilder = new StringBuilder(args[4]);
-            for (int arg = 5; arg < args.length; arg++) {
-              itemNameBuilder.append(" ").append(args[arg]);
-            }
-			String builtItemName = itemNameBuilder.toString();
-    		PowerItem commandItem = new PowerItem(args[0], args[1], args[2], args[3], builtItemName);
-			saveItemData(commandItem);
-    		return true;
+			if (args.length >= 5) {
+				StringBuilder itemNameBuilder = new StringBuilder(args[4]);
+            	for (int arg = 5; arg < args.length; arg++) {
+              		itemNameBuilder.append(" ").append(args[arg]);
+           		}
+				String builtItemName = itemNameBuilder.toString();
+				builtItemName = ChatColor.translateAlternateColorCodes("&".charAt(0), builtItemName);
+				if(sender instanceof Player) {
+            		Player p = (Player) sender;
+					PowerItem commandItem = new PowerItem(args[0], args[1], args[2], args[3], builtItemName);
+					commandItem.giveItem(p);
+					saveItemData(commandItem);
+					return true;
+				}
+				else {
+					Bukkit.getServer().getLogger().severe("[PowerItems] This command must be run as a player!");
+					return true;
+				}
+			}
+			else {
+				return false;
+			}
+			
     	}
 		else if (cmd.getName().equalsIgnoreCase("getitem")) {
 			String itemName = this.getConfig().getString("items." + args[0] + ".itemName");
 			String itemMaterial = this.getConfig().getString("items." + args[0] + ".itemMaterial");
 			String damageValue = this.getConfig().getString("items." + args[0] + ".damageValue");
 			String itemRarity = this.getConfig().getString("items." + args[0] + ".itemRarity");
+			Bukkit.getServer().getLogger().info(itemName + itemMaterial + damageValue + itemRarity);
 			if(sender instanceof Player) {
             	Player p = (Player) sender;
 				PowerItem getItem = new PowerItem(args[0], itemName, itemMaterial, damageValue, itemRarity);
