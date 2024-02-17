@@ -130,8 +130,6 @@ public class PowerItem {
 	public void setItemStack(ItemStack is) {this.is = is; }
 
 	public void giveItem(Player player) {
-		Bukkit.getServer().getLogger().info("[PowerItems] Ran giveItem");
 		player.getInventory().addItem(getItemStack());
-		Bukkit.getServer().getLogger().info("[PowerItems] Tried to give " + player.getName() + " an item");
 	}
 }
