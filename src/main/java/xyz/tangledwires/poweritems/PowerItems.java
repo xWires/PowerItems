@@ -57,22 +57,23 @@ public final class PowerItems extends JavaPlugin {
 			
     	}
 		else if (cmd.getName().equalsIgnoreCase("getitem")) {
-			FileConfiguration config = this.getConfig();
-			if (config.get("items." + args[0]) != null) {
-				String itemName = config.getString("items." + args[0] + ".itemName");
-				String itemMaterial = config.getString("items." + args[0] + ".itemMaterial");
-				String damageValue = config.getString("items." + args[0] + ".damageValue");
-				String itemRarity = config.getString("items." + args[0] + ".itemRarity");
-				Bukkit.getServer().getLogger().info(itemName + itemMaterial + damageValue + itemRarity);
-				if(sender instanceof Player) {
+			if (sender instanceof Player) {
+				FileConfiguration config = this.getConfig();
+				if (config.get("items." + args[0]) != null) {
+					String itemName = config.getString("items." + args[0] + ".itemName");
+					String itemMaterial = config.getString("items." + args[0] + ".itemMaterial");
+					String damageValue = config.getString("items." + args[0] + ".damageValue");
+					String itemRarity = config.getString("items." + args[0] + ".itemRarity");
 					Player p = (Player) sender;
-					PowerItem getItem = new PowerItem(args[0], itemName, itemMaterial, damageValue, itemRarity);
+					PowerItem getItem = new PowerItem(args[0], itemMaterial, damageValue, itemRarity, itemName);
 					getItem.giveItem(p);
+					return true;
+				}
+				else {
+					sender.sendMessage("That item does not exist!");
 				}
 			}
-			else {
-				sender.sendMessage("That item does not exist!");
-			}
+			
 		}
     	return false; 
     }
