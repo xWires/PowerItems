@@ -28,7 +28,7 @@ public class PowerItem {
 		setItemName(itemName);
 		Material material = Material.matchMaterial(itemMaterial);
 		if (material == null) {
-			Bukkit.getServer().getLogger().severe("[PowerItems] Tried to create an item with an unknown material!");
+			Bukkit.getServer().getLogger().severe("[PowerItems] Tried to create an item with an unknown material: " + itemMaterial);
 		}
 		else {
 			ItemStack is = new ItemStack(material);
