@@ -1,21 +1,21 @@
 name: PowerItems
 main: xyz.tangledwires.poweritems.PowerItems
-version: 1.0.0
+version: 1.1.0
 api-version: 1.20
 author: YT_TangledWires
 commands:
    testitem:
-      description: Obtain the testing items
+      description: Get the testing items
       usage: /testitem
       permission: poweritems.testitem
       permission-message: You don't have permission.
    createitem:
       description: Construct a new custom item
-      usage: /createitem <internalName> <itemMaterial> <damageValue> <rarity> <itemName>
+      usage: /createitem <itemID> <itemMaterial> <damage> <rarity> <itemName>
       permission: poweritems.createitem
       permission-message: You don't have permission.
    getitem:
       description: Get an item from the config file
-      usage: /getitem <internalName>
+      usage: /getitem <itemID>
       permission: poweritems.getitem
       permission-message: You don't have permission.
