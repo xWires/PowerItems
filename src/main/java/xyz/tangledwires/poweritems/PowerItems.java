@@ -91,7 +91,4 @@ public final class PowerItems extends JavaPlugin {
 		this.getConfig().set("items." + createdItem.getInternalName() + ".itemRarity", createdItem.getItemRarityType());
 		this.saveConfig();
 	}
-	public void getItemData(String internalName) {
-
-	}
 }
