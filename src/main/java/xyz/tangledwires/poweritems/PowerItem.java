@@ -1,6 +1,7 @@
 package xyz.tangledwires.poweritems;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -33,12 +34,13 @@ public class PowerItem {
 		else {
 			ItemStack is = new ItemStack(material);
 			setName(is, itemName);
-			setCustomLore(is);
 			setDamageValue(is, damageValue);
+			restoreDefaultAttributes(is);
+			setCustomLore(is);
 			setItemStack(is);
 		}
 	}
-	public ItemStack setName(ItemStack is, String name){
+	public ItemStack setName(ItemStack is, String name) {
         ItemMeta m = is.getItemMeta();
         m.setDisplayName(name);
         is.setItemMeta(m);
@@ -91,6 +93,17 @@ public class PowerItem {
 		}
 		m.setLore(lore);
 		is.setItemMeta(m);
+		return is;
+	}
+	public ItemStack restoreDefaultAttributes(ItemStack is) {
+		ItemMeta meta = is.getItemMeta();
+		Material material = is.getType();
+		Map<Material, AttributeModifier> attributeMap = Util.getDefaultAttackSpeeds();
+		if (attributeMap.containsKey(material)) {
+			meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, attributeMap.get(material));
+			is.setItemMeta(meta);
+			return is;
+		}
 		return is;
 	}
 	public ItemStack setDamageValue(ItemStack is, String damageValue) {
