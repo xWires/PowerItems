@@ -63,10 +63,10 @@ public final class PowerItems extends JavaPlugin {
 					if (config.get("items." + args[0]) != null) {
 						String itemName = config.getString("items." + args[0] + ".itemName");
 						String itemMaterial = config.getString("items." + args[0] + ".itemMaterial");
-						String damageValue = config.getString("items." + args[0] + ".damageValue");
+						String damage = config.getString("items." + args[0] + ".damage");
 						String itemRarity = config.getString("items." + args[0] + ".itemRarity");
 						Player p = (Player) sender;
-						PowerItem getItem = new PowerItem(args[0], itemMaterial, damageValue, itemRarity, itemName);
+						PowerItem getItem = new PowerItem(args[0], itemMaterial, damage, itemRarity, itemName);
 						getItem.giveItem(p);
 						return true;
 					}
@@ -87,7 +87,7 @@ public final class PowerItems extends JavaPlugin {
 	public void saveItemData(PowerItem createdItem) {
 		this.getConfig().set("items." + createdItem.getInternalName() + ".itemName", createdItem.getItemName());
 		this.getConfig().set("items." + createdItem.getInternalName() + ".itemMaterial", createdItem.getItemMaterial());
-		this.getConfig().set("items." + createdItem.getInternalName() + ".damageValue", createdItem.getHitDamageValue());
+		this.getConfig().set("items." + createdItem.getInternalName() + ".damage", createdItem.getHitDamageValue());
 		this.getConfig().set("items." + createdItem.getInternalName() + ".itemRarity", createdItem.getItemRarityType());
 		this.saveConfig();
 	}
