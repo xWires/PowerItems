@@ -1,5 +1,6 @@
 package xyz.tangledwires.poweritems;
 
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -11,6 +12,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class PowerItems extends JavaPlugin {
 	@Override
     public void onEnable() {
+		int pluginId = 21046;
+		Metrics metrics = new Metrics(this, pluginId);
 		Bukkit.getServer().getLogger().info("Loaded PowerItems by xWires.");
     }
     
