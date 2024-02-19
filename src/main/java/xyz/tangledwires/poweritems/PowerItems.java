@@ -1,5 +1,9 @@
 package xyz.tangledwires.poweritems;
 
+import java.lang.reflect.Type;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -7,13 +11,22 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import xyz.tangledwires.poweritems.events.onItemUse;
+import xyz.tangledwires.poweritems.utils.PersistantDataContainerUtils;
 
 public final class PowerItems extends JavaPlugin {
 	@Override
     public void onEnable() {
 		int pluginId = 21046;
+		@SuppressWarnings("unused")
 		Metrics metrics = new Metrics(this, pluginId);
+		getServer().getPluginManager().registerEvents(new onItemUse(), this);
 		Bukkit.getServer().getLogger().info("Loaded PowerItems by xWires.");
     }
     
@@ -83,6 +96,86 @@ public final class PowerItems extends JavaPlugin {
 			}
 			else {
 				return false;
+			}
+		}
+		else if (cmd.getName().equalsIgnoreCase("commandtrigger")) {
+			if (args.length > 0) {
+				if (sender instanceof Player) {
+					Player p = (Player) sender;
+					if (args[0].equalsIgnoreCase("add")) {
+						if (args.length < 3) {
+							return false;
+						}
+						if (p.getInventory().getItemInMainHand() == null) {
+							sender.sendMessage(ChatColor.RED + "You are not holding an item!");
+							return false;
+						}
+						else {
+							if (!args[1].equalsIgnoreCase("chat") && !args[1].equalsIgnoreCase("command")) {
+								return false;
+							}
+							// The first string should either be "chat" or "command", player.chat() will force the player to send a chat message. player.performCommand() will force the player to run a command, do not include the slash.
+							Gson gson = new Gson();
+							ItemStack heldItem = p.getInventory().getItemInMainHand();
+							Type type = new TypeToken<Map<String, String>>(){}.getType();
+							Map<String, String> commandTriggers = new HashMap<String, String>();
+							StringBuilder commandBuilder = new StringBuilder(args[2]);
+							for (int arg = 3; arg < args.length; arg++) {
+								commandBuilder.append(" ").append(args[arg]);
+							}
+							String builtCommand = commandBuilder.toString();
+							if (PersistantDataContainerUtils.getAsString(heldItem) != null) {
+								commandTriggers = gson.fromJson(PersistantDataContainerUtils.getAsString(heldItem), type);
+							}
+							if (commandTriggers == null) {
+								commandTriggers = new HashMap<String, String>();
+							}
+							commandTriggers.put(args[1], builtCommand);
+							PersistantDataContainerUtils.setAsString(heldItem, gson.toJson(commandTriggers));
+							sender.sendMessage(ChatColor.GREEN + "Added trigger to the item!");
+							return true;
+						}
+					}
+					else if (args[0].equalsIgnoreCase("clear")) {
+						PersistantDataContainerUtils.setAsString(p.getInventory().getItemInMainHand(), "");
+						return true;
+					}
+					else if (args[0].equalsIgnoreCase("list")) {
+						if (p.getInventory().getItemInMainHand() == null) {
+							sender.sendMessage(ChatColor.RED + "You are not holding an item!");
+						}
+						Gson gson = new Gson();
+						ItemStack heldItem = p.getInventory().getItemInMainHand();
+						Type type = new TypeToken<Map<String, String>>(){}.getType();
+						Map<String, String> commandTriggers = new HashMap<String, String>();
+						if (PersistantDataContainerUtils.getAsString(heldItem) != null) {
+							commandTriggers = gson.fromJson(PersistantDataContainerUtils.getAsString(heldItem), type);
+							if (commandTriggers != null) {
+								for (String key : commandTriggers.keySet()) {
+									if (key.equalsIgnoreCase("chat")) {
+										sender.sendMessage("Chat: " + commandTriggers.get(key));
+									}
+									else if (key.equalsIgnoreCase("command")) {
+										sender.sendMessage("Command: " + commandTriggers.get(key));
+									}
+								}
+							}
+							else {
+								sender.sendMessage(ChatColor.RED + "This item does not have any triggers on it!");
+							}
+						}
+						else {
+							sender.sendMessage(ChatColor.RED + "This item does not have any triggers on it!");
+						}
+						return true;
+					}
+					else {
+						return false;
+					}
+				}
+				else {
+					sender.sendMessage("[PowerItems] This command must be run as a player");
+				}
 			}
 		}
     	return false; 
