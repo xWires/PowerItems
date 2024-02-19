@@ -1,4 +1,4 @@
-package xyz.tangledwires.poweritems;
+package xyz.tangledwires.poweritems.utils;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -7,7 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.attribute.AttributeModifier.Operation;
 
-public class Util {
+public class AttributeUtils {
     private static HashMap<Material, AttributeModifier> defaultAttackSpeeds = new HashMap<Material, AttributeModifier>();
     
     static {
@@ -50,7 +50,7 @@ public class Util {
         defaultAttackSpeeds.put(Material.TRIDENT, new AttributeModifier("generic.attackSpeed", convertAttributeModifier(1.1), Operation.ADD_NUMBER));
     }
 
-    private Util() {}
+    private AttributeUtils() {}
 
     public static Map<Material, AttributeModifier> getDefaultAttackSpeeds() {
         return defaultAttackSpeeds;

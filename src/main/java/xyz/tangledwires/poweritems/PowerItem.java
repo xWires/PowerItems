@@ -14,6 +14,8 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import xyz.tangledwires.poweritems.utils.AttributeUtils;
+
 public class PowerItem {
 	private String hitDamageValue;
 	private String itemRarityType;
@@ -98,7 +100,7 @@ public class PowerItem {
 	public ItemStack restoreDefaultAttributes(ItemStack is) {
 		ItemMeta meta = is.getItemMeta();
 		Material material = is.getType();
-		Map<Material, AttributeModifier> attributeMap = Util.getDefaultAttackSpeeds();
+		Map<Material, AttributeModifier> attributeMap = AttributeUtils.getDefaultAttackSpeeds();
 		if (attributeMap.containsKey(material)) {
 			meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, attributeMap.get(material));
 			is.setItemMeta(meta);
