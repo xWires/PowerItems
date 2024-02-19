@@ -9,7 +9,7 @@ import org.bukkit.persistence.PersistentDataType;
 import xyz.tangledwires.poweritems.PowerItems;
 
 public class PersistantDataContainerUtils {
-    static NamespacedKey namespace = new NamespacedKey(PowerItems.getPlugin(PowerItems.class), "poweritems_commandTriggers");
+    static NamespacedKey namespace = new NamespacedKey(PowerItems.getPlugin(PowerItems.class), "triggers");
 
     private PersistantDataContainerUtils() {}
 
@@ -22,5 +22,6 @@ public class PersistantDataContainerUtils {
         ItemMeta m = i.getItemMeta();
         PersistentDataContainer pdc = m.getPersistentDataContainer();
         pdc.set(namespace, PersistentDataType.STRING, s);
+        i.setItemMeta(m);
     }
 }

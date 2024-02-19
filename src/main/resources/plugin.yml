@@ -21,6 +21,6 @@ commands:
       permission-message: You don't have permission.
    commandtrigger:
       description: Manage command triggers on your held item
-      usage: /commandtrigger <add|clear|list> <text>
+      usage: /commandtrigger <add|clear|list> <chat|command> <text>
       permission: poweritems.commandtrigger
       permission-message: You don't have permission.
