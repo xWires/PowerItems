@@ -26,18 +26,17 @@ public class onItemUse implements Listener {
                 ItemStack heldItem = event.getPlayer().getInventory().getItemInMainHand();
                 Type type = new TypeToken<Map<String, String>>(){}.getType();
                 Map<String, String> commandTriggers = new HashMap<String, String>();
-                if (heldItem == null) {
-                    return;
-                }
-                if (PersistantDataContainerUtils.getAsString(heldItem) != null) {
-					commandTriggers = gson.fromJson(PersistantDataContainerUtils.getAsString(heldItem), type);
-                }
-                for (String key : commandTriggers.keySet()) {
-                    if (key.equalsIgnoreCase("chat")) {
-                        event.getPlayer().chat(commandTriggers.get(key));
+                if (heldItem != null) {
+                    if (PersistantDataContainerUtils.getAsString(heldItem) != null) {
+                        commandTriggers = gson.fromJson(PersistantDataContainerUtils.getAsString(heldItem), type);
                     }
-                    else if (key.equalsIgnoreCase("command")) {
-                        event.getPlayer().performCommand(commandTriggers.get(key));
+                    for (String key : commandTriggers.keySet()) {
+                        if (key.equalsIgnoreCase("chat")) {
+                            event.getPlayer().chat(commandTriggers.get(key));
+                        }
+                        else if (key.equalsIgnoreCase("command")) {
+                            event.getPlayer().performCommand(commandTriggers.get(key));
+                        }
                     }
                 }
             }
