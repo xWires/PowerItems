@@ -26,7 +26,7 @@ public class onItemUse implements Listener {
                 ItemStack heldItem = event.getPlayer().getInventory().getItemInMainHand();
                 Type type = new TypeToken<Map<String, String>>(){}.getType();
                 Map<String, String> commandTriggers = new HashMap<String, String>();
-                if (heldItem != null) {
+                if (heldItem != null && heldItem.getItemMeta() != null) {
                     if (PersistantDataContainerUtils.getAsString(heldItem) != null) {
                         commandTriggers = gson.fromJson(PersistantDataContainerUtils.getAsString(heldItem), type);
                     }
