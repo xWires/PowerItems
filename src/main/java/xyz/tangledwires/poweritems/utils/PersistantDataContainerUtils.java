@@ -15,13 +15,20 @@ public class PersistantDataContainerUtils {
 
     public static String getAsString(ItemStack i) {
         ItemMeta m = i.getItemMeta();
-        PersistentDataContainer pdc = m.getPersistentDataContainer();
-        return pdc.get(namespace, PersistentDataType.STRING);
+        if (m != null) {
+            PersistentDataContainer pdc = m.getPersistentDataContainer();
+            return pdc.get(namespace, PersistentDataType.STRING);
+        }
+        else {
+            return null;
+        }
     }
     public static void setAsString(ItemStack i, String s) {
         ItemMeta m = i.getItemMeta();
-        PersistentDataContainer pdc = m.getPersistentDataContainer();
-        pdc.set(namespace, PersistentDataType.STRING, s);
-        i.setItemMeta(m);
+        if (m != null) {
+            PersistentDataContainer pdc = m.getPersistentDataContainer();
+            pdc.set(namespace, PersistentDataType.STRING, s);
+            i.setItemMeta(m);
+        }
     }
 }
