@@ -178,6 +178,16 @@ public final class PowerItems extends JavaPlugin {
 				}
 			}
 		}
+		else if (cmd.getName().equalsIgnoreCase("poweritems")) {
+			if (args.length > 0) {
+				if (args[0].equalsIgnoreCase("reload")) {
+					this.reloadConfig();
+				}
+			}
+			else {
+				return false;
+			}
+		}
     	return false; 
     }
 	public void saveItemData(PowerItem createdItem) {
