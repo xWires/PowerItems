@@ -27,6 +27,9 @@ public final class PowerItems extends JavaPlugin {
 		@SuppressWarnings("unused")
 		Metrics metrics = new Metrics(this, pluginId);
 		getServer().getPluginManager().registerEvents(new onItemUse(), this);
+		if (getConfig().get("config.commandTriggersAllowed") != null) {
+			getConfig().set("config.commandTriggersAllowed", "true");
+		}
 		Bukkit.getServer().getLogger().info("Loaded PowerItems by xWires.");
     }
     
