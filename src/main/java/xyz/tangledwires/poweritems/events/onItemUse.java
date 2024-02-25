@@ -4,6 +4,7 @@ import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.HashMap;
 
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -26,6 +27,7 @@ public class onItemUse implements Listener {
         if (config.getString("config.commandTriggersAllowed") == "true") {
             if (config.getString("config.permissionRequiredForTriggers") == "true") {
                 if (event.getPlayer().hasPermission("poweritems.usecommandtriggers") == false) {
+                    event.getPlayer().sendMessage(ChatColor.RED + "You don't have permission to do that.");
                     return;
                 }
             }
@@ -50,6 +52,9 @@ public class onItemUse implements Listener {
                     }
                 }
             }
+        }
+        else {
+            event.getPlayer().sendMessage(ChatColor.RED + "Commmand triggers are disabled on this server.");
         }
     }
 }
