@@ -1,12 +1,17 @@
 package xyz.tangledwires.poweritems;
 
 import java.lang.reflect.Type;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.Configuration;
@@ -19,15 +24,20 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import xyz.tangledwires.poweritems.events.onItemUse;
+import xyz.tangledwires.poweritems.events.onJoin;
 import xyz.tangledwires.poweritems.utils.PersistantDataContainerUtils;
 
 public final class PowerItems extends JavaPlugin {
+	public String version = getDescription().getVersion();
+	public String latestVersion;
+	public boolean isOutdated = false;
 	@Override
     public void onEnable() {
 		int pluginId = 21046;
 		@SuppressWarnings("unused")
 		Metrics metrics = new Metrics(this, pluginId);
 		getServer().getPluginManager().registerEvents(new onItemUse(), this);
+		getServer().getPluginManager().registerEvents(new onJoin(), this);
 		Configuration config = getConfig();
 		if (config.get("config.commandTriggersAllowed") == null) {
 			config.set("config.commandTriggersAllowed", true);
@@ -36,6 +46,21 @@ public final class PowerItems extends JavaPlugin {
 		if (config.get("config.permissionRequiredForTriggers") == null) {
 			config.set("config.permissionRequiredForTriggers", false);
 			saveConfig();
+		}
+		HttpClient httpClient = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("https://ci.tangledwires.xyz/job/PowerItems/lastSuccessfulBuild/buildNumber"))
+                .GET()
+                .build();
+		try {
+			HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+			int newestVersion = Integer.parseInt(response.body());
+			if (newestVersion > Integer.parseInt(getDescription().getVersion())) {
+				isOutdated = true;
+				latestVersion = Integer.toString(newestVersion);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		Bukkit.getServer().getLogger().info("Loaded PowerItems by xWires.");
     }
@@ -116,9 +141,9 @@ public final class PowerItems extends JavaPlugin {
 						if (args.length < 3) {
 							return false;
 						}
-						if (p.getInventory().getItemInMainHand() == null) {
+						if (p.getInventory().getItemInMainHand() == null || p.getInventory().getItemInMainHand().getType() == Material.AIR) {
 							sender.sendMessage(ChatColor.RED + "You are not holding an item!");
-							return false;
+							return true;
 						}
 						else {
 							if (!args[1].equalsIgnoreCase("chat") && !args[1].equalsIgnoreCase("command")) {
@@ -147,12 +172,17 @@ public final class PowerItems extends JavaPlugin {
 						}
 					}
 					else if (args[0].equalsIgnoreCase("clear")) {
+						if (p.getInventory().getItemInMainHand() == null || p.getInventory().getItemInMainHand().getType() == Material.AIR) {
+							sender.sendMessage(ChatColor.RED + "You are not holding an item!");
+							return true;
+						}
 						PersistantDataContainerUtils.setAsString(p.getInventory().getItemInMainHand(), "");
 						return true;
 					}
 					else if (args[0].equalsIgnoreCase("list")) {
-						if (p.getInventory().getItemInMainHand() == null) {
+						if (p.getInventory().getItemInMainHand() == null || p.getInventory().getItemInMainHand().getType() == Material.AIR) {
 							sender.sendMessage(ChatColor.RED + "You are not holding an item!");
+							return true;
 						}
 						Gson gson = new Gson();
 						ItemStack heldItem = p.getInventory().getItemInMainHand();
