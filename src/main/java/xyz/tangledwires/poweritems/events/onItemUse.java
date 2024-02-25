@@ -4,6 +4,7 @@ import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.HashMap;
 
+import org.bukkit.configuration.Configuration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -21,7 +22,13 @@ import xyz.tangledwires.poweritems.utils.PersistantDataContainerUtils;
 public class onItemUse implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerUse(PlayerInteractEvent event) {
-        if (PowerItems.getPlugin(PowerItems.class).getConfig().get("config.commandTriggersAllowed") == "true") {
+        Configuration config = PowerItems.getPlugin(PowerItems.class).getConfig();
+        if (config.getString("config.commandTriggersAllowed") == "true") {
+            if (config.getString("config.permissionRequiredForTriggers") == "true") {
+                if (event.getPlayer().hasPermission("poweritems.usecommandtriggers") == false) {
+                    return;
+                }
+            }
             if (event.getHand() == EquipmentSlot.HAND) {
                 if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
                     Gson gson = new Gson();

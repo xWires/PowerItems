@@ -9,6 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -27,8 +28,14 @@ public final class PowerItems extends JavaPlugin {
 		@SuppressWarnings("unused")
 		Metrics metrics = new Metrics(this, pluginId);
 		getServer().getPluginManager().registerEvents(new onItemUse(), this);
-		if (getConfig().get("config.commandTriggersAllowed") != null) {
-			getConfig().set("config.commandTriggersAllowed", "true");
+		Configuration config = getConfig();
+		if (config.get("config.commandTriggersAllowed") == null) {
+			config.set("config.commandTriggersAllowed", true);
+			saveConfig();
+		}
+		if (config.get("config.permissionRequiredForTriggers") == null) {
+			config.set("config.permissionRequiredForTriggers", false);
+			saveConfig();
 		}
 		Bukkit.getServer().getLogger().info("Loaded PowerItems by xWires.");
     }
@@ -185,6 +192,8 @@ public final class PowerItems extends JavaPlugin {
 			if (args.length > 0) {
 				if (args[0].equalsIgnoreCase("reload")) {
 					this.reloadConfig();
+					sender.sendMessage(ChatColor.GREEN + "Config reloaded!");
+					return true;
 				}
 			}
 			else {
