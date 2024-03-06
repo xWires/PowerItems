@@ -55,9 +55,9 @@ public final class PowerItems extends JavaPlugin {
 		try {
 			HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 			int newestVersion = Integer.parseInt(response.body());
+			latestVersion = Integer.toString(newestVersion);
 			if (newestVersion > Integer.parseInt(getDescription().getVersion())) {
 				isOutdated = true;
-				latestVersion = Integer.toString(newestVersion);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
