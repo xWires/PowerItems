@@ -225,6 +225,18 @@ public final class PowerItems extends JavaPlugin {
 					sender.sendMessage(ChatColor.GREEN + "Config reloaded!");
 					return true;
 				}
+				else if (args[0].equalsIgnoreCase("version")) {
+					sender.sendMessage(ChatColor.GRAY + "--------------------------------------------");
+					sender.sendMessage("PowerItems Version: " + getDescription().getVersion());
+					sender.sendMessage("Latest PowerItems Version: " + latestVersion);
+					sender.sendMessage("");
+					sender.sendMessage("Server Version: " + getServer().getVersion());
+					sender.sendMessage("");
+					ChatColor colour = isOutdated ? ChatColor.RED : ChatColor.GREEN;
+					sender.sendMessage("PowerItems Outdated: " + colour + ChatColor.BOLD + String.valueOf(isOutdated).toUpperCase());
+					sender.sendMessage(ChatColor.GRAY + "--------------------------------------------");
+					return true;
+				}
 			}
 			else {
 				return false;

@@ -29,6 +29,6 @@ commands:
       permission-message: You don't have permission.
    poweritems:
       description: Reload the PowerItems configuration file
-      usage: /poweritems reload
+      usage: /poweritems <reload|version>
       permission: poweritems.reload
       permission-message: You don't have permission.
