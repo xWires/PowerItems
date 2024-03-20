@@ -3,7 +3,7 @@ package xyz.tangledwires.poweritems;
 import java.util.ArrayList;
 import java.util.Map;
 
-import org.bukkit.Bukkit;
+//import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
@@ -15,49 +15,66 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import xyz.tangledwires.poweritems.utils.AttributeUtils;
-
+/**
+ * This class represents a PowerItem that can be given to a player.
+ * You can give a PowerItem to a player by using the {@link xyz.tangledwires.poweritems.PowerItem#giveTo(Player)} function.
+ */
 public class PowerItem {
-	private String hitDamageValue;
-	private String itemRarityType;
+	private int damage;
+	private String rarity;
 	private String internalName;
 	private String itemName;
-	private String itemMaterial;
+	private Material itemMaterial;
 	private ItemStack is;
-	PowerItem(String internalName, String itemMaterial, String damageValue, String rarity, String itemName) {
+	/**
+	 * This is the constructor for the {@link xyz.tangledwires.poweritems.PowerItem} class.
+	 * When creating an instance of the PowerItem class, you must pass the following parameters:
+	 * 
+	 * @param internalName The ID of the PowerItem, it should be unique as it is used in the config of PowerItems to seperate different PowerItems from each other.
+	 * @param itemMaterial The material that is used for the ItemStack inside the PowerItem instance.
+	 * @param damage How much damage the PowerItem should deal when attacking.
+	 * @param rarity The rarity text displayed in the item's lore.
+	 * @param itemName The name of the item.
+	 */
+	PowerItem(String internalName, Material itemMaterial, int damage, String rarity, String itemName) {
+		ItemStack is = new ItemStack(itemMaterial);
+		setItemStack(is);
 		setInternalName(internalName);
-		setHitDamageValue(damageValue);
-		setItemRarityType(rarity);
+		setDamage(damage);
+		setRarity(rarity);
 		setItemMaterial(itemMaterial);
-		setItemName(itemName);
-		Material material = Material.matchMaterial(itemMaterial);
-		if (material == null) {
-			Bukkit.getServer().getLogger().severe("[PowerItems] Tried to create an item with an unknown material: " + itemMaterial);
-		}
-		else {
-			ItemStack is = new ItemStack(material);
-			setName(is, itemName);
-			setDamageValue(is, damageValue);
-			restoreDefaultAttributes(is);
-			setCustomLore(is);
-			setItemStack(is);
-		}
+		setName(itemName);
+		restoreDefaultAttributes();
+		setCustomLore();
 	}
-	public ItemStack setName(ItemStack is, String name) {
+	/**
+	 * Used to set the name of the ItemStack inside the PowerItem instance.
+	 * 
+	 * @param name The new name of the item.
+	 * @return The ItemStack with the new name.
+	 */
+	public ItemStack setName(String name) {
+		this.itemName = name;
         ItemMeta m = is.getItemMeta();
         m.setDisplayName(name);
         is.setItemMeta(m);
         return is;
     }
-	public ItemStack setCustomLore(ItemStack is) {
+	/**
+	 * Sets the lore for the PowerItem, including the amount of damage that the item deals and the rarity.
+	 * Any existing lore will be cleared before the new lore is added.
+	 * 
+	 * @return The updated ItemStack with the lore added
+	 */
+	public ItemStack setCustomLore() {
 		ItemMeta m = is.getItemMeta();
 		ArrayList<String> lore = new ArrayList<String>();
 		String damage = ChatColor.GRAY + "Damage: ";
 		damage = damage + ChatColor.RED;
-		damage = damage + "+" + getHitDamageValue();
+		damage = damage + "+" + getDamage();
 		lore.add(damage);
 		lore.add("");
-		String rarity;
-		switch (itemRarityType) {
+		switch (rarity) {
 			case "common" :
 				rarity = ChatColor.BOLD + "COMMON";
 				rarity = ChatColor.WHITE + rarity;
@@ -89,7 +106,7 @@ public class PowerItem {
 				lore.add(rarity);
 				break;
 			default:
-				rarity = ChatColor.translateAlternateColorCodes("&".charAt(0), itemRarityType);
+				rarity = ChatColor.translateAlternateColorCodes('&', rarity);
 				lore.add(rarity);
 				break;
 		}
@@ -97,7 +114,15 @@ public class PowerItem {
 		is.setItemMeta(m);
 		return is;
 	}
-	public ItemStack restoreDefaultAttributes(ItemStack is) {
+	/**
+	 * This method restores the original attack speed attributes to the item.
+	 * When the attack damage attribute is added, it clears the default attack speed attribute, which means that this method is required to restore it.
+	 * <p>
+	 * The default attack speed is obtained from {@link xyz.tangledwires.poweritems.utils.AttributeUtils#getDefaultAttackSpeeds()}.
+	 * 
+	 * @return The ItemStack with its default attack speed restored.
+	 */
+	public ItemStack restoreDefaultAttributes() {
 		ItemMeta meta = is.getItemMeta();
 		Material material = is.getType();
 		Map<Material, AttributeModifier> attributeMap = AttributeUtils.getDefaultAttackSpeeds();
@@ -108,43 +133,88 @@ public class PowerItem {
 		}
 		return is;
 	}
-	public ItemStack setDamageValue(ItemStack is, String damageValue) {
-		int intDamageValue = Integer.parseInt(damageValue);
+	/**
+	 * Updates the amount of damage the PowerItem deals when attacking.
+	 * <p>
+	 * After this method is called, you should also call {@link xyz.tangledwires.poweritems.PowerItem#setCustomLore()} to update the lore of the item.
+	 * 
+	 * @param damage The amount of damage the item should do
+	 * @return The ItemStack with the updated attack damage attribute.
+	 */
+	public ItemStack setDamage(int damage) {
+		this.damage = damage;
 		ItemMeta m = is.getItemMeta();
-		m.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier("generic.attackDamage", intDamageValue, Operation.ADD_NUMBER));
+		m.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier("generic.attackDamage", damage, Operation.ADD_NUMBER));
 		m.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 		is.setItemMeta(m);
 		return is;
 	}
+	/**
+	 * Returns the amount of damage the PowerItem deals when attacking.
+	 */
+	public int getDamage() {
+		return damage;
+	}
+	/**
+	 * Returns the ID of the PowerItem instance.
+	 */
 	public String getInternalName() {
 		return internalName;
 	}
-	public void setInternalName(String internalName) {
+	/**
+	 * Returns the rarity of the PowerItem.
+	 */
+	public String getRarity() {
+		return rarity;
+	}
+	/**
+	 * Updates the rarity of the PowerItem.
+	 * <p>
+	 * After this method is called, you should also call {@link xyz.tangledwires.poweritems.PowerItem#setCustomLore()} to update the lore of the item.
+	 * 
+	 * @param rarity The new rarity of the item.
+	 */
+	public void setRarity(String rarity) {
+		this.rarity = rarity;
+	}
+	/**
+	 * Returns the name of the PowerItem.
+	 */
+	public String getItemName() {
+		return itemName;
+	}
+	/**
+	 * Returns the material of the PowerItem.
+	 */
+	public Material getItemMaterial() {
+		return itemMaterial;
+	}
+	/**
+	 * Returns the ItemStack that represents the PowerItem.
+	 */
+	public ItemStack getItemStack() {
+		return is;
+	}
+	/**
+	 * Updates the ItemStack inside the PowerItem instance
+	 * 
+	 * @param is The new ItemStack
+	 */
+	public void setItemStack(ItemStack is) {
+		this.is = is;
+	}
+	/**
+	 * Gives the PowerItem to the specified player.
+	 * 
+	 * @param player The player to give the PowerItem to.
+	 */
+	public void giveTo(Player player) {
+		player.getInventory().addItem(getItemStack());
+	}
+	private void setInternalName(String internalName) {
 		this.internalName = internalName;
 	}
-	public String getItemRarityType() {
-		return itemRarityType;
-	}
-	public void setItemRarityType(String itemRarityType) {
-		this.itemRarityType = itemRarityType;
-	}
-	public String getHitDamageValue() {
-		return hitDamageValue;
-	}
-	public void setHitDamageValue(String hitDamageValue) {
-		this.hitDamageValue = hitDamageValue;
-	}
-	public String toString(String internalName, String name, String material, int damage, String rarity) {
-		return "\nInternalName: " + internalName + "\nMaterial: " + material + "\nDamage: " + damage + "\nRarity: " + rarity + "\n" + "\nName: " + name;
-	}
-	public String getItemName() { return itemName; }
-	public void setItemName(String itemName) {this.itemName = itemName;}
-	public String getItemMaterial() { return itemMaterial; }
-	public void setItemMaterial(String itemMaterial) {this.itemMaterial = itemMaterial;}
-	public ItemStack getItemStack() { return is; }
-	public void setItemStack(ItemStack is) {this.is = is; }
-
-	public void giveItem(Player player) {
-		player.getInventory().addItem(getItemStack());
+	private void setItemMaterial(Material itemMaterial) {
+		this.itemMaterial = itemMaterial;
 	}
 }

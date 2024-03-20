@@ -33,11 +33,14 @@ public final class PowerItems extends JavaPlugin {
 	public boolean isOutdated = false;
 	@Override
     public void onEnable() {
+		// Setup metrics
 		int pluginId = 21046;
 		@SuppressWarnings("unused")
 		Metrics metrics = new Metrics(this, pluginId);
+		// Register events
 		getServer().getPluginManager().registerEvents(new onItemUse(), this);
 		getServer().getPluginManager().registerEvents(new onJoin(), this);
+		// Set default config options
 		Configuration config = getConfig();
 		if (config.get("config.commandTriggersAllowed") == null) {
 			config.set("config.commandTriggersAllowed", true);
@@ -47,6 +50,12 @@ public final class PowerItems extends JavaPlugin {
 			config.set("config.permissionRequiredForTriggers", false);
 			saveConfig();
 		}
+		/*
+		 * This checks whether the plugin is up to date.
+		 * The URL below returns the latest build number from Jenkins.
+		 * 
+		 * It gets the latest build number and compares it with the version string of this instance of PowerItems.
+		 */
 		HttpClient httpClient = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("https://ci.tangledwires.xyz/job/PowerItems/lastSuccessfulBuild/buildNumber"))
@@ -71,17 +80,26 @@ public final class PowerItems extends JavaPlugin {
     }
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+		// The "/testitem" command gives the player two items to test whether PowerItems is working properly.
     	if (cmd.getName().equalsIgnoreCase("testitem")) { 
     		if(sender instanceof Player) {
             	Player p = (Player) sender;
-				PowerItem testItem = new PowerItem("testItem", "DIAMOND_SWORD", "50", "common", "Test Item");
-				testItem.giveItem(p);
-				PowerItem ultraStaff = new PowerItem("ultraStaff", "BLAZE_ROD", "500", "rare", "§r§9Ultra Staff");
-				ultraStaff.giveItem(p);
+				PowerItem testItem = new PowerItem("testItem", Material.DIAMOND_SWORD, 50, "common", "Test Item");
+				testItem.giveTo(p);
+				PowerItem ultraStaff = new PowerItem("ultraStaff", Material.BLAZE_ROD, 500, "rare", "§r§9Ultra Staff");
+				ultraStaff.giveTo(p);
 			}
 			
     		return true;
     	}
+		/*
+		 * Creates a new instance of the PowerItem class, then gives it to the player that ran the command.
+		 * 
+		 * The first argument is the ID of the PowerItem
+		 * The second argument is the material of the item
+		 * The third argument is the amount of damage the item should do
+		 * The fourth argument is the rarity of the item, and everything after that is the name of the item
+		 */
     	else if (cmd.getName().equalsIgnoreCase("createitem")) {
 			if (args.length >= 5) {
 				StringBuilder itemNameBuilder = new StringBuilder(args[4]);
@@ -89,11 +107,23 @@ public final class PowerItems extends JavaPlugin {
               		itemNameBuilder.append(" ").append(args[arg]);
            		}
 				String builtItemName = itemNameBuilder.toString();
-				builtItemName = ChatColor.translateAlternateColorCodes("&".charAt(0), builtItemName);
+				builtItemName = ChatColor.translateAlternateColorCodes('&', builtItemName);
 				if(sender instanceof Player) {
             		Player p = (Player) sender;
-					PowerItem commandItem = new PowerItem(args[0], args[1], args[2], args[3], builtItemName);
-					commandItem.giveItem(p);
+					Material material = Material.matchMaterial(args[1]);
+					int damage;
+					if (material == null) {
+						sender.sendMessage(ChatColor.RED + "Couldn't recognise the material: " + args[1]);
+						return true;
+					}
+					try {
+						damage = Integer.parseInt(args[2]);
+					} catch (Exception e) {
+						sender.sendMessage(ChatColor.RED + "\"" + args[2] + "\" is not a valid number");
+						return true;
+					}
+					PowerItem commandItem = new PowerItem(args[0], material, damage, args[3], builtItemName);
+					commandItem.giveTo(p);
 					saveItemData(commandItem);
 					return true;
 				}
@@ -107,6 +137,11 @@ public final class PowerItems extends JavaPlugin {
 			}
 			
     	}
+		/*
+		 * Gets a PowerItem from the PowerItems config file and gives it to the player who ran the command.
+		 * 
+		 * The first arguement is the ID of the PowerItem.
+		 */
 		else if (cmd.getName().equalsIgnoreCase("getitem")) {
 			if (args.length == 1) {
 				if (sender instanceof Player) {
@@ -117,8 +152,21 @@ public final class PowerItems extends JavaPlugin {
 						String damage = config.getString("items." + args[0] + ".damage");
 						String itemRarity = config.getString("items." + args[0] + ".itemRarity");
 						Player p = (Player) sender;
-						PowerItem getItem = new PowerItem(args[0], itemMaterial, damage, itemRarity, itemName);
-						getItem.giveItem(p);
+						Material material = Material.matchMaterial(itemMaterial);
+						int intDamage;
+						if (material == null) {
+							sender.sendMessage(ChatColor.RED + "Couldn't recognise the material: " + args[1]);
+							return true;
+						}
+						try {
+							intDamage = Integer.parseInt(damage);
+						} catch (Exception e) {
+							sender.sendMessage(ChatColor.RED + "\"" + args[2] + "\" is not a valid number");
+							return true;
+						}
+						itemName = ChatColor.translateAlternateColorCodes('&', itemName);
+						PowerItem getItem = new PowerItem(args[0], material, intDamage, itemRarity, itemName);
+						getItem.giveTo(p);
 						return true;
 					}
 					else {
@@ -133,6 +181,9 @@ public final class PowerItems extends JavaPlugin {
 				return false;
 			}
 		}
+		/*
+		 * Manages command triggers on an item (it doesn't have to be a PowerItem).
+		 */
 		else if (cmd.getName().equalsIgnoreCase("commandtrigger")) {
 			if (args.length > 0) {
 				if (sender instanceof Player) {
@@ -149,7 +200,7 @@ public final class PowerItems extends JavaPlugin {
 							if (!args[1].equalsIgnoreCase("chat") && !args[1].equalsIgnoreCase("command")) {
 								return false;
 							}
-							// The first string should either be "chat" or "command", player.chat() will force the player to send a chat message. player.performCommand() will force the player to run a command, do not include the slash.
+							// The first string should either be "chat" or "command", player.chat() will force the player to send a chat message. player.performCommand() will force the player to run a command, do not include the forward slash.
 							Gson gson = new Gson();
 							ItemStack heldItem = p.getInventory().getItemInMainHand();
 							Type type = new TypeToken<Map<String, String>>(){}.getType();
@@ -220,19 +271,21 @@ public final class PowerItems extends JavaPlugin {
 		}
 		else if (cmd.getName().equalsIgnoreCase("poweritems")) {
 			if (args.length > 0) {
+				// Reloads the PowerItems config file.
 				if (args[0].equalsIgnoreCase("reload")) {
 					this.reloadConfig();
 					sender.sendMessage(ChatColor.GREEN + "Config reloaded!");
 					return true;
 				}
+				// Gets some information about the currently installed version of PowerItems.
 				else if (args[0].equalsIgnoreCase("version")) {
+					ChatColor colour = isOutdated ? ChatColor.RED : ChatColor.GREEN;
 					sender.sendMessage(ChatColor.GRAY + "--------------------------------------------");
 					sender.sendMessage("PowerItems Version: " + getDescription().getVersion());
 					sender.sendMessage("Latest PowerItems Version: " + latestVersion);
 					sender.sendMessage("");
 					sender.sendMessage("Server Version: " + getServer().getVersion());
 					sender.sendMessage("");
-					ChatColor colour = isOutdated ? ChatColor.RED : ChatColor.GREEN;
 					sender.sendMessage("PowerItems Outdated: " + colour + ChatColor.BOLD + String.valueOf(isOutdated).toUpperCase());
 					sender.sendMessage(ChatColor.GRAY + "--------------------------------------------");
 					return true;
@@ -244,11 +297,12 @@ public final class PowerItems extends JavaPlugin {
 		}
     	return false; 
     }
+	// This gets the information about the PowerItem and saves it to the plugin's config file
 	public void saveItemData(PowerItem createdItem) {
-		this.getConfig().set("items." + createdItem.getInternalName() + ".itemName", createdItem.getItemName());
-		this.getConfig().set("items." + createdItem.getInternalName() + ".itemMaterial", createdItem.getItemMaterial());
-		this.getConfig().set("items." + createdItem.getInternalName() + ".damage", createdItem.getHitDamageValue());
-		this.getConfig().set("items." + createdItem.getInternalName() + ".itemRarity", createdItem.getItemRarityType());
+		this.getConfig().set("items." + createdItem.getInternalName() + ".itemName", createdItem.getItemName().replace('§', '&'));
+		this.getConfig().set("items." + createdItem.getInternalName() + ".itemMaterial", createdItem.getItemMaterial().toString());
+		this.getConfig().set("items." + createdItem.getInternalName() + ".damage", createdItem.getDamage());
+		this.getConfig().set("items." + createdItem.getInternalName() + ".itemRarity", createdItem.getRarity().replace('§', '&'));
 		this.saveConfig();
 	}
 }

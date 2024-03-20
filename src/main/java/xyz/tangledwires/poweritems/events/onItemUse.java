@@ -40,13 +40,15 @@ public class onItemUse implements Listener {
                     if (heldItem != null && heldItem.getItemMeta() != null) {
                         if (PersistantDataContainerUtils.getAsString(heldItem) != null) {
                             commandTriggers = gson.fromJson(PersistantDataContainerUtils.getAsString(heldItem), type);
-                        }
-                        for (String key : commandTriggers.keySet()) {
-                            if (key.equalsIgnoreCase("chat")) {
-                                event.getPlayer().chat(commandTriggers.get(key));
-                            }
-                            else if (key.equalsIgnoreCase("command")) {
-                                event.getPlayer().performCommand(commandTriggers.get(key));
+                            if (commandTriggers != null) {
+                                for (String key : commandTriggers.keySet()) {
+                                    if (key.equalsIgnoreCase("chat")) {
+                                        event.getPlayer().chat(commandTriggers.get(key));
+                                    }
+                                    else if (key.equalsIgnoreCase("command")) {
+                                        event.getPlayer().performCommand(commandTriggers.get(key));
+                                    }
+                                }
                             }
                         }
                     }
