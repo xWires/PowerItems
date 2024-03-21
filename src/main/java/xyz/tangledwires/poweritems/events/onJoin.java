@@ -9,6 +9,9 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import xyz.tangledwires.poweritems.PowerItems;
 
+/**
+ * When a player joins, if they are opped and the plugin is outdated, they will recieve a message notifying them of this.
+ */
 public class onJoin implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {

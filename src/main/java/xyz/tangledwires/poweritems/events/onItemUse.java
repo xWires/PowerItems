@@ -20,25 +20,37 @@ import com.google.gson.reflect.TypeToken;
 import xyz.tangledwires.poweritems.PowerItems;
 import xyz.tangledwires.poweritems.utils.PersistantDataContainerUtils;
 
+/**
+ * This class handles activating command triggers when right clicking.
+ * <p>
+ * See {@link xyz.tangledwires.poweritems.PowerItems#onCommand(org.bukkit.command.CommandSender, org.bukkit.command.Command, String, String[])} for how they are added to items.
+ */
 public class onItemUse implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerUse(PlayerInteractEvent event) {
         Configuration config = PowerItems.getPlugin(PowerItems.class).getConfig();
+        // Checks if command triggers are enabled on the server.
         if (config.getString("config.commandTriggersAllowed") == "true") {
+            // If permissions are required to use command triggers, check if the player has permission.
             if (config.getString("config.permissionRequiredForTriggers") == "true") {
                 if (event.getPlayer().hasPermission("poweritems.usecommandtriggers") == false) {
                     event.getPlayer().sendMessage(ChatColor.RED + "You don't have permission to do that.");
                     return;
                 }
             }
+            // Check if the item that was right clicked is in the player's main hand
             if (event.getHand() == EquipmentSlot.HAND) {
+                // Was it a right click?
                 if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+                    // Get the list of command triggers
                     Gson gson = new Gson();
                     ItemStack heldItem = event.getPlayer().getInventory().getItemInMainHand();
                     Type type = new TypeToken<Map<String, String>>(){}.getType();
                     Map<String, String> commandTriggers = new HashMap<String, String>();
+                    // Is there a valid item in the player's hand?
                     if (heldItem != null && heldItem.getItemMeta() != null) {
                         if (PersistantDataContainerUtils.getAsString(heldItem) != null) {
+                            // Get the command triggers, then execute them.
                             commandTriggers = gson.fromJson(PersistantDataContainerUtils.getAsString(heldItem), type);
                             if (commandTriggers != null) {
                                 for (String key : commandTriggers.keySet()) {

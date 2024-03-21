@@ -1,20 +1,20 @@
 package xyz.tangledwires.poweritems;
 
 import java.util.ArrayList;
-import java.util.Map;
 
-//import org.bukkit.Bukkit;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.attribute.AttributeModifier.Operation;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import xyz.tangledwires.poweritems.utils.AttributeUtils;
+import com.google.common.collect.Multimap;
 /**
  * This class represents a PowerItem that can be given to a player.
  * You can give a PowerItem to a player by using the {@link xyz.tangledwires.poweritems.PowerItem#giveTo(Player)} function.
@@ -36,7 +36,7 @@ public class PowerItem {
 	 * @param rarity The rarity text displayed in the item's lore.
 	 * @param itemName The name of the item.
 	 */
-	PowerItem(String internalName, Material itemMaterial, int damage, String rarity, String itemName) {
+	public PowerItem(String internalName, Material itemMaterial, int damage, String rarity, String itemName) {
 		ItemStack is = new ItemStack(itemMaterial);
 		setItemStack(is);
 		setInternalName(internalName);
@@ -44,8 +44,8 @@ public class PowerItem {
 		setRarity(rarity);
 		setItemMaterial(itemMaterial);
 		setName(itemName);
-		restoreDefaultAttributes();
 		setCustomLore();
+		restoreDefaultAttributes();
 	}
 	/**
 	 * Used to set the name of the ItemStack inside the PowerItem instance.
@@ -125,12 +125,12 @@ public class PowerItem {
 	public ItemStack restoreDefaultAttributes() {
 		ItemMeta meta = is.getItemMeta();
 		Material material = is.getType();
-		Map<Material, AttributeModifier> attributeMap = AttributeUtils.getDefaultAttackSpeeds();
-		if (attributeMap.containsKey(material)) {
-			meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, attributeMap.get(material));
-			is.setItemMeta(meta);
-			return is;
+		Multimap<Attribute, AttributeModifier> defaultAttributes = material.getDefaultAttributeModifiers(EquipmentSlot.HAND);
+		for (AttributeModifier modifier : defaultAttributes.get(Attribute.GENERIC_ATTACK_SPEED)) {
+			meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, modifier);
+			Bukkit.getServer().getLogger().info(String.valueOf(modifier.getAmount()));
 		}
+		is.setItemMeta(meta);
 		return is;
 	}
 	/**
