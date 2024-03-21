@@ -117,8 +117,6 @@ public class PowerItem {
 	/**
 	 * This method restores the original attack speed attributes to the item.
 	 * When the attack damage attribute is added, it clears the default attack speed attribute, which means that this method is required to restore it.
-	 * <p>
-	 * The default attack speed is obtained from {@link xyz.tangledwires.poweritems.utils.AttributeUtils#getDefaultAttackSpeeds()}.
 	 * 
 	 * @return The ItemStack with its default attack speed restored.
 	 */
