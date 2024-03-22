@@ -71,11 +71,13 @@ public final class PowerItems extends JavaPlugin {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		registerDefaultRarities();
 		Bukkit.getServer().getLogger().info("Loaded PowerItems by xWires.");
     }
     
     @Override
     public void onDisable() {
+		unregisterDefaultRarities();
         Bukkit.getServer().getLogger().info("PowerItems Disabled, bye!");
     }
     @Override
@@ -304,5 +306,38 @@ public final class PowerItems extends JavaPlugin {
 		this.getConfig().set("items." + createdItem.getInternalName() + ".damage", createdItem.getDamage());
 		this.getConfig().set("items." + createdItem.getInternalName() + ".itemRarity", createdItem.getRarity().replace('§', '&'));
 		this.saveConfig();
+	}
+	public void registerDefaultRarities() {
+		String common = ChatColor.BOLD + "COMMON";
+		common = ChatColor.WHITE + common;
+		RarityManager.registerRarity("common", common);
+
+		String uncommon = ChatColor.BOLD + "UNCOMMON";
+		uncommon = ChatColor.GREEN + uncommon;
+		RarityManager.registerRarity("uncommon", uncommon);
+
+		String rare = ChatColor.BOLD + "RARE";
+		rare = ChatColor.BLUE + rare;
+		RarityManager.registerRarity("rare", rare);
+
+		String epic = ChatColor.BOLD + "EPIC";
+		epic = ChatColor.DARK_PURPLE + epic;
+		RarityManager.registerRarity("epic", epic);
+
+		String legendary = ChatColor.BOLD + "LEGENDARY";
+		legendary = ChatColor.GOLD + legendary;
+		RarityManager.registerRarity("legendary", legendary);
+
+		String mythic = ChatColor.BOLD + "MYTHIC";
+		mythic = ChatColor.LIGHT_PURPLE + mythic;
+		RarityManager.registerRarity("mythic", mythic);
+	}
+	public void unregisterDefaultRarities() {
+		RarityManager.unregisterRarity("common");
+		RarityManager.unregisterRarity("uncommon");
+		RarityManager.unregisterRarity("rare");
+		RarityManager.unregisterRarity("epic");
+		RarityManager.unregisterRarity("legendary");
+		RarityManager.unregisterRarity("mythic");
 	}
 }

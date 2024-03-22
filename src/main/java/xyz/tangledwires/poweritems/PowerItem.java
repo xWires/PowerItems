@@ -74,41 +74,11 @@ public class PowerItem {
 		damage = damage + "+" + getDamage();
 		lore.add(damage);
 		lore.add("");
-		switch (rarity) {
-			case "common" :
-				rarity = ChatColor.BOLD + "COMMON";
-				rarity = ChatColor.WHITE + rarity;
-				lore.add(rarity);
-				break;
-			case "uncommon" :
-				rarity = ChatColor.BOLD + "UNCOMMON";
-				rarity = ChatColor.GREEN + rarity;
-				lore.add(rarity);
-				break;
-			case "rare" :
-				rarity = ChatColor.BOLD + "RARE";
-				rarity = ChatColor.BLUE + rarity;
-				lore.add(rarity);
-				break;
-			case "epic" :
-				rarity = ChatColor.BOLD + "EPIC";
-				rarity = ChatColor.DARK_PURPLE + rarity;
-				lore.add(rarity);
-				break;
-			case "legendary" :
-				rarity = ChatColor.BOLD + "LEGENDARY";
-				rarity = ChatColor.GOLD + rarity;
-				lore.add(rarity);
-				break;
-			case "mythic" :
-				rarity = ChatColor.BOLD + "MYTHIC";
-				rarity = ChatColor.LIGHT_PURPLE + rarity;
-				lore.add(rarity);
-				break;
-			default:
-				rarity = ChatColor.translateAlternateColorCodes('&', rarity);
-				lore.add(rarity);
-				break;
+		if (RarityManager.getRarity(rarity) != null) {
+			lore.add(RarityManager.getRarity(rarity));
+		}
+		else {
+			lore.add("UNKNOWN RARITY");
 		}
 		m.setLore(lore);
 		is.setItemMeta(m);
