@@ -13,7 +13,7 @@ public class RarityManager {
         throw new IllegalStateException("RarityManager should not be instantiated.");
     }
     /**
-     * Returns a Map<String, String> of available rarities.
+     * Returns a Map of available rarities.
      * 
      * @return The available rarities.
      */

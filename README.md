@@ -33,7 +33,7 @@ And add the following to your pom.xml file if you are using Maven:
     <dependency>
         <groupId>xyz.tangledwires.poweritems</groupId>
         <artifactId>PowerItems</artifactId>
-        <version>59</version>
+        <version>60</version>
     </dependency>
 </dependencies>
 ```
