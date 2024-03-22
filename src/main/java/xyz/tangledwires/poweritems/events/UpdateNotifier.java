@@ -12,7 +12,7 @@ import xyz.tangledwires.poweritems.PowerItems;
 /**
  * When a player joins, if they are opped and the plugin is outdated, they will recieve a message notifying them of this.
  */
-public class onJoin implements Listener {
+public class UpdateNotifier implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         PowerItems mainClass = PowerItems.getPlugin(PowerItems.class);

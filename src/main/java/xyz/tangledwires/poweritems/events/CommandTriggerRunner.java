@@ -25,7 +25,7 @@ import xyz.tangledwires.poweritems.utils.PersistantDataContainerUtils;
  * <p>
  * See {@link xyz.tangledwires.poweritems.PowerItems#onCommand(org.bukkit.command.CommandSender, org.bukkit.command.Command, String, String[])} for how they are added to items.
  */
-public class onItemUse implements Listener {
+public class CommandTriggerRunner implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerUse(PlayerInteractEvent event) {
         Configuration config = PowerItems.getPlugin(PowerItems.class).getConfig();

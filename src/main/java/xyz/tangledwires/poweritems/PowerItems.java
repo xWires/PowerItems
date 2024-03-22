@@ -23,8 +23,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import xyz.tangledwires.poweritems.events.onItemUse;
-import xyz.tangledwires.poweritems.events.onJoin;
+import xyz.tangledwires.poweritems.events.CommandTriggerRunner;
+import xyz.tangledwires.poweritems.events.UpdateNotifier;
 import xyz.tangledwires.poweritems.utils.PersistantDataContainerUtils;
 
 public final class PowerItems extends JavaPlugin {
@@ -38,8 +38,8 @@ public final class PowerItems extends JavaPlugin {
 		@SuppressWarnings("unused")
 		Metrics metrics = new Metrics(this, pluginId);
 		// Register events
-		getServer().getPluginManager().registerEvents(new onItemUse(), this);
-		getServer().getPluginManager().registerEvents(new onJoin(), this);
+		getServer().getPluginManager().registerEvents(new CommandTriggerRunner(), this);
+		getServer().getPluginManager().registerEvents(new UpdateNotifier(), this);
 		// Set default config options
 		Configuration config = getConfig();
 		if (config.get("config.commandTriggersAllowed") == null) {
