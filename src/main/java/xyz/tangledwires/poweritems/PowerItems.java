@@ -124,9 +124,15 @@ public final class PowerItems extends JavaPlugin {
 						sender.sendMessage(ChatColor.RED + "\"" + args[2] + "\" is not a valid number");
 						return true;
 					}
-					PowerItem commandItem = new PowerItem(args[0], material, damage, args[3], builtItemName);
-					commandItem.giveTo(p);
-					saveItemData(commandItem);
+					if (material.isItem()) {
+						PowerItem commandItem = new PowerItem(args[0], material, damage, args[3], builtItemName);
+						commandItem.giveTo(p);
+						saveItemData(commandItem);
+						return true;
+					}
+					else {
+						sender.sendMessage(ChatColor.RED + material.toString() + " is not an item.");
+					}
 					return true;
 				}
 				else {
@@ -167,8 +173,14 @@ public final class PowerItems extends JavaPlugin {
 							return true;
 						}
 						itemName = ChatColor.translateAlternateColorCodes('&', itemName);
-						PowerItem getItem = new PowerItem(args[0], material, intDamage, itemRarity, itemName);
-						getItem.giveTo(p);
+						if (material.isItem()) {
+							PowerItem getItem = new PowerItem(args[0], material, intDamage, itemRarity, itemName);
+							getItem.giveTo(p);
+						}
+						else {
+							sender.sendMessage(ChatColor.RED + material.toString() + " is not an item.");
+							return true;
+						}
 						return true;
 					}
 					else {

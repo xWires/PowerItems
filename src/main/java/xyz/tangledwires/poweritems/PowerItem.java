@@ -35,8 +35,12 @@ public class PowerItem {
 	 * @param damage How much damage the PowerItem should deal when attacking.
 	 * @param rarity The rarity text displayed in the item's lore.
 	 * @param itemName The name of the item.
+	 * @throws IllegalArgumentException If the given material is not an item.
 	 */
 	public PowerItem(String internalName, Material itemMaterial, int damage, String rarity, String itemName) {
+		if (!itemMaterial.isItem()) {
+			throw new IllegalArgumentException(itemMaterial.toString() + " is not an item.");
+		}
 		ItemStack is = new ItemStack(itemMaterial);
 		setItemStack(is);
 		setInternalName(internalName);
