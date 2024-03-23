@@ -132,8 +132,8 @@ public final class PowerItems extends JavaPlugin {
 					}
 					else {
 						sender.sendMessage(ChatColor.RED + material.toString() + " is not an item.");
+						return true;
 					}
-					return true;
 				}
 				else {
 					Bukkit.getServer().getLogger().severe("[PowerItems] This command must be run as a player!");
@@ -185,10 +185,12 @@ public final class PowerItems extends JavaPlugin {
 					}
 					else {
 						sender.sendMessage("That item does not exist!");
+						return true;
 					}
 				}
 				else {
 					sender.sendMessage("[PowerItems] This command must be run as a player!");
+					return true;
 				}
 			}
 			else {
