@@ -3,7 +3,7 @@ package xyz.tangledwires.poweritems;
 import java.util.HashMap;
 import java.util.Map;
 
-/*8
+/**
  * Used for managing the list of rarities that can be set on a PowerItem.
  */
 public class RarityManager {

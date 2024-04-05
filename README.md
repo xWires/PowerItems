@@ -1,5 +1,7 @@
 # PowerItems
 
+[![Build Status](https://ci.tangledwires.xyz/job/PowerItems/badge/icon)](https://ci.tangledwires.xyz/job/PowerItems/)
+
 PowerItems is a Minecraft Spigot plugin that can be used to make items with custom amounts of damage and lore
 
 Information about the created items is saved in the plugin's "config.yml" file.
@@ -37,3 +39,7 @@ And add the following to your pom.xml file if you are using Maven:
     </dependency>
 </dependencies>
 ```
+<br>
+<p align="center">
+    <img src="https://bstats.org/signatures/bukkit/PowerItems.svg">
+</p>
