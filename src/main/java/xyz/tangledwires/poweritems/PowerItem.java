@@ -73,10 +73,14 @@ public class PowerItem {
 	public ItemStack setCustomLore() {
 		ItemMeta m = is.getItemMeta();
 		ArrayList<String> lore = new ArrayList<String>();
-		String damage = ChatColor.GRAY + "Damage: ";
-		damage = damage + ChatColor.RED;
-		damage = damage + "+" + getDamage();
-		lore.add(damage);
+		int itemDamage = getDamage();
+		if (itemDamage != 0) {
+			String prefix = itemDamage > 0 ? "+" : "";
+			String damage = ChatColor.GRAY + "Damage: ";
+			damage = damage + ChatColor.RED;
+			damage = damage + prefix + itemDamage;
+			lore.add(damage);
+		}
 		lore.add("");
 		if (RarityManager.getRarity(rarity) != null) {
 			lore.add(RarityManager.getRarity(rarity));
