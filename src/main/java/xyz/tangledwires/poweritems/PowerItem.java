@@ -26,6 +26,8 @@ public class PowerItem {
 	private String itemName;
 	private Material itemMaterial;
 	private ItemStack is;
+	private PowerItems powerItems = (PowerItems) Bukkit.getServer().getPluginManager().getPlugin("PowerItems");
+	private RarityManager rm = powerItems.getRarityManager();
 	/**
 	 * This is the constructor for the {@link xyz.tangledwires.poweritems.PowerItem} class.
 	 * When creating an instance of the PowerItem class, you must pass the following parameters:
@@ -82,8 +84,8 @@ public class PowerItem {
 			lore.add(damage);
 		}
 		lore.add("");
-		if (RarityManager.getRarity(rarity) != null) {
-			lore.add(RarityManager.getRarity(rarity));
+		if (rm.getRarity(rarity) != null) {
+			lore.add(rm.getRarity(rarity));
 		}
 		else {
 			lore.add("UNKNOWN RARITY");

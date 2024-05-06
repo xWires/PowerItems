@@ -31,6 +31,9 @@ public final class PowerItems extends JavaPlugin {
 	public String version = getDescription().getVersion();
 	public String latestVersion;
 	public boolean isOutdated = false;
+
+	private RarityManager rarityManager = new RarityManager();
+
 	@Override
     public void onEnable() {
 		// Setup metrics
@@ -321,37 +324,43 @@ public final class PowerItems extends JavaPlugin {
 		this.getConfig().set("items." + createdItem.getInternalName() + ".itemRarity", createdItem.getRarity().replace('§', '&'));
 		this.saveConfig();
 	}
-	public void registerDefaultRarities() {
+	private void registerDefaultRarities() {
 		String common = ChatColor.BOLD + "COMMON";
 		common = ChatColor.WHITE + common;
-		RarityManager.registerRarity("common", common);
+		rarityManager.registerRarity("common", common);
 
 		String uncommon = ChatColor.BOLD + "UNCOMMON";
 		uncommon = ChatColor.GREEN + uncommon;
-		RarityManager.registerRarity("uncommon", uncommon);
+		rarityManager.registerRarity("uncommon", uncommon);
 
 		String rare = ChatColor.BOLD + "RARE";
 		rare = ChatColor.BLUE + rare;
-		RarityManager.registerRarity("rare", rare);
+		rarityManager.registerRarity("rare", rare);
 
 		String epic = ChatColor.BOLD + "EPIC";
 		epic = ChatColor.DARK_PURPLE + epic;
-		RarityManager.registerRarity("epic", epic);
+		rarityManager.registerRarity("epic", epic);
 
 		String legendary = ChatColor.BOLD + "LEGENDARY";
 		legendary = ChatColor.GOLD + legendary;
-		RarityManager.registerRarity("legendary", legendary);
+		rarityManager.registerRarity("legendary", legendary);
 
 		String mythic = ChatColor.BOLD + "MYTHIC";
 		mythic = ChatColor.LIGHT_PURPLE + mythic;
-		RarityManager.registerRarity("mythic", mythic);
+		rarityManager.registerRarity("mythic", mythic);
 	}
-	public void unregisterDefaultRarities() {
-		RarityManager.unregisterRarity("common");
-		RarityManager.unregisterRarity("uncommon");
-		RarityManager.unregisterRarity("rare");
-		RarityManager.unregisterRarity("epic");
-		RarityManager.unregisterRarity("legendary");
-		RarityManager.unregisterRarity("mythic");
+	private void unregisterDefaultRarities() {
+		rarityManager.unregisterRarity("common");
+		rarityManager.unregisterRarity("uncommon");
+		rarityManager.unregisterRarity("rare");
+		rarityManager.unregisterRarity("epic");
+		rarityManager.unregisterRarity("legendary");
+		rarityManager.unregisterRarity("mythic");
+	}
+	/**
+	 * @return The instance of RarityManager in use by PowerItems.
+	 */
+	public RarityManager getRarityManager() {
+		return this.rarityManager;
 	}
 }

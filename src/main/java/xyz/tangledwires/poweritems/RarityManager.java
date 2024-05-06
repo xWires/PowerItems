@@ -6,18 +6,16 @@ import java.util.Map;
 /**
  * Used for managing the list of rarities that can be set on a PowerItem.
  */
-public class RarityManager {
-    private static Map<String, String> rarities = new HashMap<String,String>();
+class RarityManager {
+    private Map<String, String> rarities = new HashMap<String,String>();
 
-    private RarityManager() {
-        throw new IllegalStateException("RarityManager should not be instantiated.");
-    }
+    RarityManager() {}
     /**
      * Returns a Map of available rarities.
      * 
      * @return The available rarities.
      */
-    public static Map<String, String> getRaritiesMap() {
+    public Map<String, String> getRaritiesMap() {
         return rarities;
     }
     /**
@@ -26,7 +24,7 @@ public class RarityManager {
      * @param key The key of the rarity to retrieve.
      * @return The text that is shown on a PowerItem when the specified rarity is applied to it.
      */
-    public static String getRarity(String key) {
+    public String getRarity(String key) {
         return rarities.get(key);
     }
     /**
@@ -36,7 +34,7 @@ public class RarityManager {
      * @param value The text that should be shown on a PowerItem when the rarity is applied to it.
      * @throws IllegalArgumentException If the key contains spaces, is empty, or if the rarity is already registered.
      */
-    public static void registerRarity(String key, String value) {
+    public void registerRarity(String key, String value) {
         if (key.contains(" ")) {
             throw new IllegalArgumentException("Rarity key cannot contain spaces.");
         }
@@ -54,7 +52,7 @@ public class RarityManager {
      * @param key The key of the rarity to unregister.
      * @throws IllegalArgumentException If the key contains spaces, is empty, or if the rarity is already unregistered.
      */
-    public static void unregisterRarity(String key) {
+    public void unregisterRarity(String key) {
         if (key.contains(" ")) {
             throw new IllegalArgumentException("Rarity key cannot contain spaces.");
         }
@@ -72,7 +70,7 @@ public class RarityManager {
      * @param key The key of the rarity to check.
      * @return true if the key is a registered rarity, false if it is not.
      */
-    public static boolean isRegistered(String key) {
+    public boolean isRegistered(String key) {
         return rarities.containsKey(key);
     }
 }
