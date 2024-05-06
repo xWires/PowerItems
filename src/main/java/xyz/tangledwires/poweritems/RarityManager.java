@@ -6,7 +6,7 @@ import java.util.Map;
 /**
  * Used for managing the list of rarities that can be set on a PowerItem.
  */
-class RarityManager {
+public class RarityManager {
     private Map<String, String> rarities = new HashMap<String,String>();
 
     RarityManager() {}
