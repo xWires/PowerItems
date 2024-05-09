@@ -18,6 +18,7 @@ public class UpdateNotifier implements Listener {
         PowerItems mainClass = PowerItems.getPlugin(PowerItems.class);
         if (event.getPlayer().isOp()) {
             if (mainClass.isOutdated) {
+                event.getPlayer().sendMessage(ChatColor.GRAY + "--------------------------------------------");
                 event.getPlayer().sendMessage(ChatColor.GREEN + "An update is available for PowerItems!");
                 event.getPlayer().sendMessage(ChatColor.GREEN + "You are currently running version " + mainClass.version);
                 event.getPlayer().sendMessage(ChatColor.GREEN + "The newest version is " + mainClass.latestVersion);
@@ -25,6 +26,7 @@ public class UpdateNotifier implements Listener {
                 message.setColor(net.md_5.bungee.api.ChatColor.GREEN);
                 message.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://ci.tangledwires.xyz/job/PowerItems/"));
                 event.getPlayer().spigot().sendMessage(message);
+                event.getPlayer().sendMessage(ChatColor.GRAY + "--------------------------------------------");
             }
         }
     }

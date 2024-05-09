@@ -1,5 +1,6 @@
 package xyz.tangledwires.poweritems;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,7 +17,7 @@ public class RarityManager {
      * @return The available rarities.
      */
     public Map<String, String> getRaritiesMap() {
-        return rarities;
+        return Collections.unmodifiableMap(rarities);
     }
     /**
      * Gets a rarity from its key.
@@ -32,9 +33,12 @@ public class RarityManager {
      * 
      * @param key The key of the new rarity.
      * @param value The text that should be shown on a PowerItem when the rarity is applied to it.
-     * @throws IllegalArgumentException If the key contains spaces, is empty, or if the rarity is already registered.
+     * @throws IllegalArgumentException If the key is null, contains spaces, is empty, or if the rarity is already registered.
      */
     public void registerRarity(String key, String value) {
+        if (key == null) {
+            throw new IllegalArgumentException("Rarity key cannot be null.");
+        }
         if (key.contains(" ")) {
             throw new IllegalArgumentException("Rarity key cannot contain spaces.");
         }
