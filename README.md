@@ -21,24 +21,7 @@ To use PowerItems as a dependency, add the following to your plugin.yml file:
 ```yaml
 depend: [PowerItems]
 ```
-And add the following to your pom.xml file if you are using Maven:
-
-```xml
-<repositories>
-    <repository>
-        <id>xwires</id>
-        <url>https://nexus.tangledwires.xyz/repository/maven-releases/</url>
-    </repository>
-</repositories>
-
-<dependencies>
-    <dependency>
-        <groupId>xyz.tangledwires.poweritems</groupId>
-        <artifactId>PowerItems</artifactId>
-        <version>60</version>
-    </dependency>
-</dependencies>
-```
+Then follow the instructions here: https://github.com/xWires/PowerItems/packages/2413385
 <br>
 <p align="center">
     <img src="https://bstats.org/signatures/bukkit/PowerItems.svg">
