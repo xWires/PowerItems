@@ -24,14 +24,9 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import xyz.tangledwires.poweritems.events.CommandTriggerRunner;
-import xyz.tangledwires.poweritems.events.UpdateNotifier;
 import xyz.tangledwires.poweritems.utils.PersistantDataContainerUtils;
 
 public final class PowerItems extends JavaPlugin {
-	public String version = getDescription().getVersion();
-	public String latestVersion;
-	public boolean isOutdated = false;
-
 	private RarityManager rarityManager = new RarityManager();
 
 	@Override
@@ -42,7 +37,6 @@ public final class PowerItems extends JavaPlugin {
 		Metrics metrics = new Metrics(this, pluginId);
 		// Register events
 		getServer().getPluginManager().registerEvents(new CommandTriggerRunner(), this);
-		getServer().getPluginManager().registerEvents(new UpdateNotifier(), this);
 		// Set default config options
 		Configuration config = getConfig();
 		if (config.get("config.commandTriggersAllowed") == null) {
@@ -52,27 +46,6 @@ public final class PowerItems extends JavaPlugin {
 		if (config.get("config.permissionRequiredForTriggers") == null) {
 			config.set("config.permissionRequiredForTriggers", false);
 			saveConfig();
-		}
-		/*
-		 * This checks whether the plugin is up to date.
-		 * The URL below returns the latest build number from Jenkins.
-		 * 
-		 * It gets the latest build number and compares it with the version string of this instance of PowerItems.
-		 */
-		HttpClient httpClient = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://ci.tangledwires.xyz/job/PowerItems/lastSuccessfulBuild/buildNumber"))
-                .GET()
-                .build();
-		try {
-			HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-			int newestVersion = Integer.parseInt(response.body());
-			latestVersion = Integer.toString(newestVersion);
-			if (newestVersion > Integer.parseInt(getDescription().getVersion())) {
-				isOutdated = true;
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 		registerDefaultRarities();
 		Bukkit.getServer().getLogger().info("Loaded PowerItems by xWires.");
@@ -298,14 +271,10 @@ public final class PowerItems extends JavaPlugin {
 				}
 				// Gets some information about the currently installed version of PowerItems.
 				else if (args[0].equalsIgnoreCase("version")) {
-					ChatColor colour = isOutdated ? ChatColor.RED : ChatColor.GREEN;
-					sender.sendMessage(ChatColor.GRAY + "--------------------------------------------");
+                    sender.sendMessage(ChatColor.GRAY + "--------------------------------------------");
 					sender.sendMessage("PowerItems Version: " + getDescription().getVersion());
-					sender.sendMessage("Latest PowerItems Version: " + latestVersion);
 					sender.sendMessage("");
 					sender.sendMessage("Server Version: " + getServer().getVersion());
-					sender.sendMessage("");
-					sender.sendMessage("PowerItems Outdated: " + colour + ChatColor.BOLD + String.valueOf(isOutdated).toUpperCase());
 					sender.sendMessage(ChatColor.GRAY + "--------------------------------------------");
 					return true;
 				}
